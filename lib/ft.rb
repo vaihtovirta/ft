@@ -1,6 +1,8 @@
 require "fuzzy_match"
 require "unicode"
+require "active_support/core_ext/object"
 require "ft/version"
+require "ft/errors"
 require "ft/containers/dictorinaries_container"
 require "ft/containers/levenshtein_container"
 require "ft/containers/stemmer_container"
@@ -21,6 +23,8 @@ module FT
   end
 
   def self.process_sentence(sentence, print = false)
+    raise BlankSentenceError, "Sentence is blank" if sentence.blank?
+
     recognized_sentence = SentenceProcessor.new(sentence).call
 
     options = SearchOptionsBuilder.new(recognized_sentence).call

@@ -54,5 +54,14 @@ describe FT do
 
       it { is_expected.to eq(expected_response) }
     end
+
+    context "when no sentence provided" do
+      let(:sentence) { "" }
+
+      it do
+        expect { described_class.process_sentence(sentence) }
+          .to raise_error(FT::BlankSentenceError, "Sentence is blank")
+      end
+    end
   end
 end
