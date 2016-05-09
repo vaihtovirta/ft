@@ -1,9 +1,6 @@
 module FT
   class Recognizer
-    extend FT::DictorinariesContainer
-    include FT::DictorinariesContainer
-
-    load_dictorinaries [:months]
+    include FT::DictorinariesContainer::All
 
     SIMPLE_TURNS = %i(origin destination start_date finish_date).freeze
     RECOGNIZING_RULES = {
@@ -60,18 +57,14 @@ module FT
     end
 
     def date(values)
-      month = fuzzy_find(months, values.last, :name)[:eng_name]
-      [:date, "#{values.first} #{month}"]
+      month = FuzzyMatch.new(months, read: :name).find(values.last)
+      [:date, "#{values.first} #{month[:eng_name]}"]
     end
 
     def range_date(values)
       full_date = values.last
       month = full_date.split(" ").last
       [:range_date, ["#{values.first} #{month}", full_date]]
-    end
-
-    def fuzzy_find(collection, match, key)
-      FuzzyMatch.new(collection, read: key).find(match)
     end
   end
 end

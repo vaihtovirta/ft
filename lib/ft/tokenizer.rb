@@ -1,15 +1,11 @@
 module FT
   class Tokenizer
-    extend FT::DictorinariesContainer, Forwardable
-    include FT::DictorinariesContainer,
+    extend Forwardable
+    include FT::DictorinariesContainer::All,
             FT::LevenshteinContainer,
             FT::StemmerContainer
 
     def_delegator :stemmer, :stem
-
-    load_dictorinaries
-
-    LEVENSTEIN_DISTANCE = 3
 
     attr_reader :word
     private :word
@@ -39,7 +35,7 @@ module FT
         months.map { |record| record[:name] } => :month,
         times_in_words.map { |record| record[:name] } => :time_in_words,
         cities.map { |record| record[:name] } => :city
-      }.freeze
+      }
     end
 
     private
@@ -66,8 +62,7 @@ module FT
     def suitable_to_fuzzy?(match, word)
       return if match.empty?
 
-      match.chr == word.chr &&
-        levenshtein.distance(match, word) <= LEVENSTEIN_DISTANCE
+      match.chr == word.chr && acceptable_distance?(match, word)
     end
   end
 end

@@ -1,9 +1,8 @@
 require "daybreak"
+require "active_support/core_ext/string"
 
 module FT
   module DictorinariesContainer
-    DB_NAME = "config/main.db".freeze
-
     ALL_DICTORINARIES = %i(
       cities
       digits
@@ -18,17 +17,24 @@ module FT
       weekends
     ).freeze
 
-    def load_dictorinaries(dictorinaries = ALL_DICTORINARIES)
-      dictorinaries.each do |dictorinary|
+    private_constant :ALL_DICTORINARIES
+
+    module All
+      ALL_DICTORINARIES.each do |dictorinary|
         define_method dictorinary do
-          database[dictorinary]
+          FT.database[dictorinary]
         end
       end
-
     end
 
-    def database
-      @database ||= Daybreak::DB.new(DB_NAME)
+    ALL_DICTORINARIES.each do |dictorinary|
+      class_eval %(
+        module #{dictorinary.to_s.camelize}
+          def #{dictorinary}
+            FT.database[:#{dictorinary}]
+          end
+        end
+      )
     end
   end
 end

@@ -1,12 +1,11 @@
 module FT
   module Utilities
     module Iata
-      extend FT::DictorinariesContainer
-      include FT::DictorinariesContainer
-
-      load_dictorinaries [:cities]
+      include FT::DictorinariesContainer::Cities
 
       DEFAULT_IATA_CODE = "LED".freeze
+
+      private_constant :DEFAULT_IATA_CODE
 
       def iata_code(city)
         city_record(city)[:iata_code] || DEFAULT_IATA_CODE

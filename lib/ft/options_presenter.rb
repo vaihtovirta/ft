@@ -1,13 +1,13 @@
 module FT
   class OptionsPresenter
-    extend FT::DictorinariesContainer
-    include FT::Utilities::DateHelper,
-            FT::Utilities::Iata,
-            FT::DictorinariesContainer
+    include FT::Utilities::Iata,
+            FT::DictorinariesContainer::PassengerCountWords,
+            FT::DictorinariesContainer::TripClasses
 
-    load_dictorinaries %i(passenger_count_words trip_classes)
+    DEFAULT_ECONOMY_CLASS = "Y".freeze
+    DEFAULT_TIMEZONE = "Europe/Moscow".freeze
 
-    ECONOMY_CLASS = "Y".freeze
+    private_constant :DEFAULT_ECONOMY_CLASS, :DEFAULT_TIMEZONE
 
     attr_reader :association
     private :association
@@ -25,35 +25,25 @@ module FT
     end
 
     def passenger_count
-      target = passenger_count_words.shuffle.detect do |words|
-        words[:name] == read_assoc(:passenger_count)
-      end || {}
+      target = find_by_attribute(passenger_count_words, :passenger_count)
 
       target[:count] || 1
     end
 
     def trip_class
-      target = trip_classes.shuffle.detect do |words|
-        words[:name] == read_assoc(:trip_class)
-      end || {}
+      target = find_by_attribute(trip_classes, :trip_class)
 
-      target[:code] || ECONOMY_CLASS
+      target[:code] || DEFAULT_ECONOMY_CLASS
     end
 
     def date
-      return parse_date(read_assoc(:date)) if read_assoc(:date)
-      return word_to_date(read_assoc(:time_in_words)) if read_assoc(:time_in_words)
-      return weekend_date if read_assoc(:weekend_word)
-
-      date_now
-    end
-
-    def start_date
-      parse_date(read_assoc(:range_date).first)
-    end
-
-    def finish_date
-      parse_date(read_assoc(:range_date).last)
+      FT::DateParser.new(
+        date: read_assoc(:date),
+        range_date: read_assoc(:range_date),
+        time_in_words: read_assoc(:time_in_words),
+        weekend_word: read_assoc(:weekend_word),
+        timezone: timezone
+      ).call
     end
 
     def segments
@@ -68,6 +58,18 @@ module FT
       association.assoc(attribute)&.last
     end
 
+    def find_by_attribute(collection, target_attribute, record_attribute = :name)
+      collection.shuffle.detect do |words|
+        words[record_attribute] == read_assoc(target_attribute)
+      end || {}
+    end
+
+    def timezone
+      current_location = find_by_attribute(cities, :origin)
+
+      current_location[:timezone] || DEFAULT_TIMEZONE
+    end
+
     def one_way_segment
       [{ date: date, destination: destination, origin: origin }]
     end
@@ -75,12 +77,12 @@ module FT
     def round_trip_segment
       [
         {
-          date: start_date,
+          date: date.first,
           destination: destination,
           origin: origin
         },
         {
-          date: finish_date,
+          date: date.last,
           destination: origin,
           origin: destination
         }

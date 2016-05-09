@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "daybreak"
+  spec.add_runtime_dependency "activesupport"
   spec.add_runtime_dependency "damerau-levenshtein"
   spec.add_runtime_dependency "fuzzy_match"
   spec.add_runtime_dependency "ruby-stemmer"

@@ -1,18 +1,25 @@
 require "fuzzy_match"
 require "unicode"
 require "ft/version"
-require "ft/containers/stemmer_container"
 require "ft/containers/dictorinaries_container"
 require "ft/containers/levenshtein_container"
-require "ft/sentence_processor"
-require "ft/tokenizer"
+require "ft/containers/stemmer_container"
+require "ft/utilities/iata"
+require "ft/date_parser"
+require "ft/options_presenter"
 require "ft/recognizer"
 require "ft/search_options_builder"
-require "ft/utilities/iata"
-require "ft/utilities/date_helper"
-require "ft/options_presenter"
+require "ft/sentence_processor"
+require "ft/tokenizer"
 
 module FT
+  def self.database
+    @database ||= Daybreak::DB.new("config/main.db")
+    at_exit { @database.close }
+
+    @database
+  end
+
   def self.process_sentence(sentence, print = false)
     recognized_sentence = SentenceProcessor.new(sentence).call
 

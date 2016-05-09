@@ -2,13 +2,11 @@ require "spec_helper"
 
 describe FT do
   describe "#process_sentence" do
-    include FT::Utilities::DateHelper
-
     subject { described_class.process_sentence(sentence) }
 
     context "from PAR to LPP on weekend" do
       let(:sentence) { "из Парижа в Лапенранту на выходные" }
-      let(:date) { weekend_date }
+      let(:date) { FT::DateParser.new(weekend_word: "выходные").call }
       let(:expected_response) do
         {
           passengers:
@@ -23,8 +21,9 @@ describe FT do
 
     context "from BKK to DOM with dates" do
       let(:sentence) { "из Бангкока в Доминику с 26 по 29 декабря вдвоём бизнес" }
-      let(:start_date) { parse_date("26 dec") }
-      let(:finish_date) { parse_date("29 dec") }
+      let(:date_parser) { FT::DateParser.new(range_date: ["26 dec", "29 dec"]).call }
+      let(:start_date) { date_parser.first }
+      let(:finish_date) { date_parser.last }
       let(:expected_response) do
         {
           passengers:
@@ -41,7 +40,7 @@ describe FT do
 
     context "from PAR to LPP on weekend" do
       let(:sentence) { "Париж послезавтра" }
-      let(:date) { word_to_date("послезавтра") }
+      let(:date) { FT::DateParser.new(time_in_words: "послезавтра").call }
       let(:expected_response) do
         {
           passengers:
