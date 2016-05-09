@@ -1,0 +1,28 @@
+AllCops:
+  TargetRubyVersion: 2.3
+  Exclude:
+    - '.bundle/**/*'
+    - 'bin/**/*'
+    - 'config/**/*'
+
+Documentation:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 110
+
+Style/SymbolArray:
+  Enabled: true
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/RedundantFreeze:
+  Enabled: false
+
+Metrics/AbcSize:
+  Exclude:
+    - 'test/**/*'
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
