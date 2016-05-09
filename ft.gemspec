@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Emil Shakirov"]
   spec.email         = ["5o.smoker@gmail.com"]
 
-  spec.summary       = "TODO: Write a short summary, because Rubygems requires one."
-  spec.description   = "TODO: Write a longer description or delete this line."
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = "FT — from origin to destination"
+  spec.description   = "FT — a small toy library, that translates flight search sentence to computer readable parameters."
+  spec.homepage      = "https://github.com/vaihtovirta/ft"
   spec.license       = "MIT"
 
   if spec.respond_to?(:metadata)
