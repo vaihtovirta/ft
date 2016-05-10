@@ -59,7 +59,7 @@ module FT
     end
 
     def find_by_attribute(collection, target_attribute, record_attribute = :name)
-      collection.shuffle.detect do |words|
+      collection.find do |words|
         words[record_attribute] == read_assoc(target_attribute)
       end || {}
     end

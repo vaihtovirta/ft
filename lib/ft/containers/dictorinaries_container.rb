@@ -1,21 +1,27 @@
 require "daybreak"
+require "pry"
 require "active_support/core_ext/string"
 
 module FT
   module DictorinariesContainer
-    ALL_DICTORINARIES = %i(
-      cities
+    SIMPLE_DICTORINARIES = %i(
       digits
       finish_pps
       froms
-      months
-      passenger_count_words
       start_pps
-      times_in_words
       tos
-      trip_classes
       weekends
     ).freeze
+
+    COMPLEX_DICTORINARIES = %i(
+      passenger_count_words
+      trip_classes
+      months
+      times_in_words
+      cities
+    ).freeze
+
+    ALL_DICTORINARIES = SIMPLE_DICTORINARIES + COMPLEX_DICTORINARIES
 
     private_constant :ALL_DICTORINARIES
 
@@ -23,6 +29,12 @@ module FT
       ALL_DICTORINARIES.each do |dictorinary|
         define_method dictorinary do
           FT.database[dictorinary]
+        end
+
+        next unless COMPLEX_DICTORINARIES.include?(dictorinary)
+
+        define_method "#{dictorinary}_names" do
+          FT.database[dictorinary].map { |record| record[:name] }
         end
       end
     end

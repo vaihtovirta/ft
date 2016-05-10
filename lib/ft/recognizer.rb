@@ -62,9 +62,9 @@ module FT
     end
 
     def range_date(values)
-      full_date = values.last
-      month = full_date.split(" ").last
-      [:range_date, ["#{values.first} #{month}", full_date]]
+      finish_date = values.last
+      start_date = "#{values.first} #{finish_date.split(' ').last}"
+      [:range_date, [start_date, finish_date]]
     end
   end
 end

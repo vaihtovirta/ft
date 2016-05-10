@@ -30,11 +30,11 @@ module FT
         start_pps => :start_pp,
         finish_pps => :finish_pp,
         weekends => :weekend_word,
-        passenger_count_words.map { |record| record[:name] } => :passenger_count,
-        trip_classes.map { |record| record[:name] } => :trip_class,
-        months.map { |record| record[:name] } => :month,
-        times_in_words.map { |record| record[:name] } => :time_in_words,
-        cities.map { |record| record[:name] } => :city
+        passenger_count_words_names => :passenger_count,
+        trip_classes_names => :trip_class,
+        months_names => :month,
+        times_in_words_names => :time_in_words,
+        cities_names => :city
       }
     end
 
