@@ -1,6 +1,6 @@
 # FT
 
-FT — a small toy-library, that translatesnatural language flight search query to computer-readable parameters.
+FT — a small toy-library, that translates natural language flight search query to computer-readable parameters.
 
 ## Installation
 
