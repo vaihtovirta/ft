@@ -17,22 +17,17 @@ require "ft/tokenizer"
 module FT
   def self.database
     @database ||= Daybreak::DB.new("config/main.db")
+
     at_exit { @database.close }
 
     @database
   end
 
-  def self.process_sentence(sentence, print = false)
+  def self.process_sentence(sentence)
     raise BlankSentenceError, "Sentence is blank" if sentence.blank?
 
     recognized_sentence = SentenceProcessor.new(sentence).call
 
-    options = SearchOptionsBuilder.new(recognized_sentence).call
-
-    if print
-      puts options
-    else
-      options
-    end
+    SearchOptionsBuilder.new(recognized_sentence).call
   end
 end

@@ -1,6 +1,0 @@
-#!/usr/bin/env ruby
-
-require "bundler/setup"
-require "ft"
-
-FT.process_sentence(ARGV.first, true)

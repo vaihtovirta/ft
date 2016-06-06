@@ -26,20 +26,6 @@ You call use it in your ruby code:
   #  }
 ```
 
-or as CLI:
-```bash
-  exe/ft "с 18 по 25 мая в Москву бизнес"
-
-  {
-    :passengers=>{:adults=>1, :children=>0, :infants=>0},
-    :segments=>[
-      {:date=>"2016-05-18", :destination=>"MOW", :origin=>"LED"},
-      {:date=>"2016-05-25", :destination=>"LED", :origin=>"MOW"}
-    ],
-    :trip_class=>"С"
-  }
-```
-
 ## Development and tests
 Firstly you have to setup database with dictionaries:
 
