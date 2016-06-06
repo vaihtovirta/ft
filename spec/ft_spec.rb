@@ -1,8 +1,8 @@
 require "spec_helper"
 
 describe FT do
-  describe "#process_sentence" do
-    subject { described_class.process_sentence(sentence) }
+  describe "#build_search_options" do
+    subject { described_class.build_search_options(sentence) }
 
     context "from PAR to LPP on weekend" do
       let(:sentence) { "из Парижа в Лапенранту на выходные" }
@@ -59,7 +59,7 @@ describe FT do
       let(:sentence) { "" }
 
       it do
-        expect { described_class.process_sentence(sentence) }
+        expect { described_class.build_search_options(sentence) }
           .to raise_error(FT::BlankSentenceError, "Sentence is blank")
       end
     end

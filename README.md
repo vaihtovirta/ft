@@ -16,7 +16,7 @@ gem install pkg/ft-0.1.0.gem
 You call use it in your ruby code:
 
 ```ruby
-  FT.process_sentence("18 мая в Париж")
+  FT.build_search_options("18 мая в Париж")
   # => {
   #     :passengers=>{:adults=>1, :children=>0, :infants=>0},
   #     :segments=>[

@@ -23,7 +23,7 @@ module FT
     @database
   end
 
-  def self.process_sentence(sentence)
+  def self.build_search_options(sentence)
     raise BlankSentenceError, "Sentence is blank" if sentence.blank?
 
     recognized_sentence = SentenceProcessor.new(sentence).call
